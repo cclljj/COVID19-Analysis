@@ -7,6 +7,7 @@ import os, matplotlib
 matplotlib.use('Agg')
 
 import matplotlib.pyplot as plt
+
 import pylab as plot
 
 WINDOW = 100	# sliding window size for calculating N, A, T, and D
@@ -150,7 +151,6 @@ T2 = T.copy()
 T2 = T2.set_index('Country/Region').T
 A2 = A.copy()
 A2 = A2.set_index('Country/Region').T
-
 
 for country in PLOT_Countries:
   plot = T2.plot(ylim=(0,160),figsize=(20,10),logy=False,fontsize=26,y=PLOT_Countries[country]["countries"])

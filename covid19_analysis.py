@@ -5,7 +5,6 @@ import numpy as np
 
 import os, matplotlib
 matplotlib.use('Agg')
-
 import matplotlib.pyplot as plt
 
 import pylab as plot
@@ -147,10 +146,39 @@ for i in range(2,len(T.columns)):
       T.iat[index,i] = N.iat[index,i] / A.iat[index,i]
 
 
+# D: the deadth rate among all confirmed cases
+D = df1.copy()
+
+for index, row in df1.iterrows():
+  country = df1.at[index,"Country/Region"]
+  index2 = df2["Country/Region"].loc[lambda x: x==country].index.tolist()
+  if len(index2)>0:
+    index2 = index2[0]
+  else:
+    index2 = -1
+
+  for h in D.columns:
+    if h != "Country/Region":
+      n1 = int(df1.at[index,h])
+      if n1==0:
+        n1 = 1.0
+      if index2>=0:
+        n2 = int(df2.at[index2,h])
+      else:
+        n2 = 0.0
+      D.at[index,h] = n2 * 1.0 / n1
+      #print(n2,n1,D.at[index,h])
+
 T2 = T.copy()
 T2 = T2.set_index('Country/Region').T
 A2 = A.copy()
 A2 = A2.set_index('Country/Region').T
+D2 = D.copy()
+D2 = D2.set_index('Country/Region').T
+
+T2.index = pd.to_datetime(T2.index)
+A2.index = pd.to_datetime(A2.index)
+D2.index = pd.to_datetime(D2.index)
 
 for country in PLOT_Countries:
   plot = T2.plot(ylim=(0,160),figsize=(20,10),logy=False,fontsize=26,y=PLOT_Countries[country]["countries"])
@@ -261,31 +289,6 @@ fig.savefig(IMG_FOLDER + "/latest_zero_A.png", bbox_inches='tight')
 plt.close(fig)
 
 
-# D: the deadth rate among all confirmed cases
-D = df1.copy()
-
-for index, row in df1.iterrows():
-  country = df1.at[index,"Country/Region"]
-  index2 = df2["Country/Region"].loc[lambda x: x==country].index.tolist()
-  if len(index2)>0:
-    index2 = index2[0]
-  else:
-    index2 = -1
-
-  for h in D.columns:
-    if h != "Country/Region":
-      n1 = int(df1.at[index,h])
-      if n1==0:
-        n1 = 1.0
-      if index2>=0:
-        n2 = int(df2.at[index2,h])
-      else:
-        n2 = 0.0
-      D.at[index,h] = n2 * 1.0 / n1
-      #print(n2,n1,D.at[index,h])
-
-D2 = D.copy()
-D2 = D2.set_index('Country/Region').T
 to_show = []
 for index, row in D.iterrows():
   if D.at[index,D.columns[len(D.columns)-1]]>0.1:

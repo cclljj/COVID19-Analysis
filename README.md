@@ -1,4 +1,4 @@
-# COVID19-Analysis
+# COVID-19 Analysis
 
 This repository stores the scripts to conduct COVID-19 data analysis using Little's Theorem. The results of this analysis is shown on the [COVID-19 Pandemic Analysis](https://sites.google.com/view/covid19-analysis) website.
 

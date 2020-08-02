@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 import pylab as plot
 
-WINDOW = 100	# sliding window size for calculating N, A, T, and D
+WINDOW = 1000	# sliding window size for calculating N, A, T, and D
 PLOT_FONT_SIZE = 26
 LEGEND_FONT_SIZE = 20
 params = {'legend.fontsize': LEGEND_FONT_SIZE,
@@ -47,6 +47,12 @@ PLOT_Countries = {
         "countries" : ['Taiwan','Iceland','Germany','New Zealand',"Malta",
                        'Mauritius','San Marino','Malaysia']
     },   
+    "Case 2"  : {
+	"fname" : "tw_flight",
+	"countries" : ['Canada', 'US', 'Macau, China', 'Hong Kong, China', 'China', 'Japan',
+			'Philippines', 'Vietnam', 'Thailand', 'United Arab Emirates', 'Korea, South',
+			'Malaysia', 'Singapore', 'Cambodia', 'Indonesia', 'Netherlands', 'France', 'United Kingdom']
+    },
 }
 
 # confirmed cases
@@ -268,8 +274,32 @@ plt.close(fig)
 
 
 to_show = []
+for index, row in D.iterrows():
+  if D.at[index,D.columns[len(D.columns)-1]]>0.1:
+    to_show.append(D.at[index,D.columns[0]])
+    #print(D.at[index,D.columns[len(D.columns)-1]], df1.at[index,D.columns[len(D.columns)-1]], df2.at[index,D.columns[len(D.columns)-1]], D.at[index,D.columns[0]])
+
+plot = D2.plot(ylim=(0,0.4),figsize=(20,10),logy=False,fontsize=26,y=to_show)
+plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
+#plt.show()
+fig = plot.get_figure()
+fig.savefig(IMG_FOLDER + "/latest_deathly_D.png", bbox_inches='tight')
+plt.close(fig)
+
+plot = A2.plot(ylim=(0.1,5000),figsize=(20,10),logy=True,fontsize=26,y=to_show)
+plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('New COVID-19 Case Rate', fontsize=PLOT_FONT_SIZE)
+#plt.show()
+fig = plot.get_figure()
+fig.savefig(IMG_FOLDER + "/latest_deathly_A.png", bbox_inches='tight')
+plt.close(fig)
+
+
+
+to_show = []
 for index, row in T.iterrows():
-  if A.at[index,T.columns[len(T.columns)-1]] < 1 and df1.at[index,T.columns[len(T.columns)-1]] > 400:
+  if A.at[index,T.columns[len(T.columns)-1]] < 5 and df1.at[index,T.columns[len(T.columns)-1]] > 400:
     to_show.append(T.at[index,T.columns[0]])
 
 plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)
@@ -289,29 +319,10 @@ fig.savefig(IMG_FOLDER + "/latest_zero_A.png", bbox_inches='tight')
 plt.close(fig)
 
 
-to_show = []
-for index, row in D.iterrows():
-  if D.at[index,D.columns[len(D.columns)-1]]>0.1:
-    to_show.append(D.at[index,D.columns[0]])
-    #print(D.at[index,D.columns[len(D.columns)-1]], df1.at[index,D.columns[len(D.columns)-1]], df2.at[index,D.columns[len(D.columns)-1]], D.at[index,D.columns[0]])
 
-
-plot = D2.plot(ylim=(0,0.4),figsize=(20,10),logy=False,fontsize=26,y=to_show)
-plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
-#plt.show()
-fig = plot.get_figure()
-fig.savefig(IMG_FOLDER + "/latest_deathly_D.png", bbox_inches='tight')
-plt.close(fig)
-
-plot = A2.plot(ylim=(0.1,5000),figsize=(20,10),logy=True,fontsize=26,y=to_show)
-plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('New COVID-19 Case Rate', fontsize=PLOT_FONT_SIZE)
-#plt.show()
-fig = plot.get_figure()
-fig.savefig(IMG_FOLDER + "/latest_deathly_A.png", bbox_inches='tight')
-plt.close(fig)
-
+################
+# scatter plot
+################
 
 output_df = pd.DataFrame({"Country":T[T.columns[0]],"N":N[T.columns[len(T.columns)-1]],"A":A[T.columns[len(T.columns)-1]],"T":T[T.columns[len(T.columns)-1]],"D":D[T.columns[len(T.columns)-1]]})
 output_df_t = output_df.set_index('Country').T

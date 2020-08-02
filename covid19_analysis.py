@@ -48,11 +48,13 @@ PLOT_Countries = {
                        'Mauritius','San Marino','Malaysia']
     },   
     "Case 2"  : {
-	"fname" : "tw_flight",
-	"countries" : ['Canada', 'US', 'Macau, China', 'Hong Kong, China', 'China', 'Japan',
-			'Philippines', 'Vietnam', 'Thailand', 'United Arab Emirates', 'Korea, South',
-			'Malaysia', 'Singapore', 'Cambodia', 'Indonesia', 'Netherlands', 'France', 'United Kingdom']
-    },
+        "fname" : "tw_flight",
+        "countries" : ['Canada', 'US', 'Macau, China', 'Hong Kong, China', 
+                       'China', 'Japan', 'Philippines', 'Vietnam', 'Thailand', 
+                       'United Arab Emirates', 'Korea, South', 'Malaysia', 
+                       'Singapore', 'Cambodia', 'Indonesia', 'Netherlands', 
+                       'France', 'United Kingdom']  
+    }, 
 }
 
 # confirmed cases
@@ -299,7 +301,7 @@ plt.close(fig)
 
 to_show = []
 for index, row in T.iterrows():
-  if A.at[index,T.columns[len(T.columns)-1]] < 5 and df1.at[index,T.columns[len(T.columns)-1]] > 400:
+  if A.at[index,T.columns[len(T.columns)-1]] < 3 and df1.at[index,T.columns[len(T.columns)-1]] > 400:
     to_show.append(T.at[index,T.columns[0]])
 
 plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)

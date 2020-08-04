@@ -140,7 +140,7 @@ for i in range(WINDOW,len(A.columns)):
 
 
 
-# T: the average time for each case in the COVID-19 status
+# T: the average recovery time for each case in the COVID-19 status
 T = df1.copy()
 
 for i in range(2,len(T.columns)):
@@ -191,7 +191,7 @@ D2.index = pd.to_datetime(D2.index)
 for country in PLOT_Countries:
   plot = T2.plot(ylim=(0,160),figsize=(20,10),logy=False,fontsize=26,y=PLOT_Countries[country]["countries"])
   plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-  plt.ylabel('Average COVID-19 Case Time (days)', fontsize=PLOT_FONT_SIZE)
+  plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
   #plt.show()
   fig = plot.get_figure()
   fig.savefig(IMG_FOLDER + "/latest_" + PLOT_Countries[country]["fname"] + "_T.png", bbox_inches='tight')
@@ -216,7 +216,7 @@ for index, row in T.iterrows():
 
 plot = T2.plot(ylim=(0,400),figsize=(20,10),logy=False,fontsize=26,y=to_show)
 plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Average COVID-19 Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 #plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_worst_T.png", bbox_inches='tight')
@@ -238,7 +238,7 @@ for index, row in T.iterrows():
 
 plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)
 plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Average COVID-19 Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 #plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_best_T.png", bbox_inches='tight')
@@ -260,7 +260,7 @@ for index, row in T.iterrows():
 
 plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)
 plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Average COVID-19 Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 #plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_rare_T.png", bbox_inches='tight')
@@ -306,7 +306,7 @@ for index, row in T.iterrows():
 
 plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)
 plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Average COVID-19 Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 #plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_zero_T.png", bbox_inches='tight')
@@ -330,7 +330,7 @@ output_df = pd.DataFrame({"Country":T[T.columns[0]],"N":N[T.columns[len(T.column
 output_df_t = output_df.set_index('Country').T
 
 plot = output_df.plot.scatter(x='T', y='A', xlim=(0.1,200),ylim=(0.0001,10000),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
-plt.xlabel('Average Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 plt.ylabel('Average Case Rate (cases/day)', fontsize=PLOT_FONT_SIZE)
 plt.show()
 fig = plot.get_figure()
@@ -338,7 +338,7 @@ fig.savefig(IMG_FOLDER + "/latest_all_A-T.png", bbox_inches='tight')
 plt.close(fig)
 
 plot = output_df.plot.scatter(x='T', y='D', xlim=(0.1,200),ylim=(0.0001,1),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
-plt.xlabel('Average Case Time (days)', fontsize=PLOT_FONT_SIZE)
+plt.xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 plt.ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
 plt.show()
 fig = plot.get_figure()

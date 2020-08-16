@@ -307,10 +307,10 @@ plt.close(fig)
 
 to_show = []
 for index, row in T.iterrows():
-  if A.at[index,T.columns[len(T.columns)-1]] < 3 and df1.at[index,T.columns[len(T.columns)-1]] > 400:
+  if A.at[index,T.columns[len(T.columns)-1]] < 3 and df1.at[index,T.columns[len(T.columns)-1]] > 400 and T.at[index,T.columns[len(T.columns)-1]]<20:
     to_show.append(T.at[index,T.columns[0]])
 
-plot = T2.plot(ylim=(0,120),figsize=(20,10),logy=False,fontsize=26,y=to_show)
+plot = T2.plot(figsize=(20,10),logy=False,fontsize=26,y=to_show)
 plt.xlabel('Date', fontsize=PLOT_FONT_SIZE)
 plt.ylabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 #plt.show()

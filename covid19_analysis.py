@@ -125,8 +125,11 @@ for index, row in df1.iterrows():
         n3 = df3.at[index3,h]
       else:
         n3 = 0
-      N.at[index,h] = n1 - n2 - n3
-
+      n1 = n1 - n2 - n3
+      if n1>0:
+        N.at[index,h] = n1
+      else: # set to a very small number
+        N.at[index,h] = 0.1
 
 # A: the arrival rate of the confirmed cases
 A = df1.copy()
@@ -174,8 +177,11 @@ for index, row in df1.iterrows():
         n2 = int(df2.at[index2,h])
       else:
         n2 = 0.0
-      D.at[index,h] = n2 * 1.0 / n1
-      #print(n2,n1,D.at[index,h])
+
+      if n2>0:
+        D.at[index,h] = n2 * 1.0 / n1
+      else:  # set to a very small number
+        D.at[index,h] = 0.0001
 
 T2 = T.copy()
 T2 = T2.set_index('Country/Region').T
@@ -329,15 +335,25 @@ plt.close(fig)
 output_df = pd.DataFrame({"Country":T[T.columns[0]],"N":N[T.columns[len(T.columns)-1]],"A":A[T.columns[len(T.columns)-1]],"T":T[T.columns[len(T.columns)-1]],"D":D[T.columns[len(T.columns)-1]]})
 output_df_t = output_df.set_index('Country').T
 
-plot = output_df.plot.scatter(x='T', y='A', xlim=(0.1,200),ylim=(0.0001,10000),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
+plot = output_df.plot.scatter(x='T', y='A', figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
 plt.xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Onset Rate (#/days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Onset Rate (cases/day)', fontsize=PLOT_FONT_SIZE)
 plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_all_A-T.png", bbox_inches='tight')
 plt.close(fig)
 
-plot = output_df.plot.scatter(x='T', y='D', xlim=(0.1,200),ylim=(0.0001,1),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
+fig, ax = plt.subplots()
+plot = output_df.plot.hexbin(x='T', y='A', figsize=(15,15),fontsize=26,gridsize=20, xscale='log', yscale='log', mincnt=1, cmap='Blues', ax=ax)
+ax.set_xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
+ax.set_ylabel('Onset Rate (cases/day)', fontsize=PLOT_FONT_SIZE)
+plt.show()
+fig.savefig(IMG_FOLDER + "/latest_all_A-T_hexbin.png", bbox_inches='tight')
+plt.close(fig)
+
+
+
+plot = output_df.plot.scatter(x='T', y='D', ylim=(0.0005,0.5), figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
 plt.xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
 plt.ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
 plt.show()
@@ -345,18 +361,45 @@ fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_all_D-T.png", bbox_inches='tight')
 plt.close(fig)
 
-plot = output_df.plot.scatter(x='N', y='A', xlim=(1,10000000),ylim=(0.0001,100000),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
+fig, ax = plt.subplots()
+plot = output_df.plot.hexbin(x='T', y='D', ylim=(0.0005,0.5), figsize=(15,15),fontsize=26,gridsize=20, xscale='log', yscale='log', mincnt=1, cmap='Blues', ax=ax)
+ax.set_xlabel('Average Recovery Time (days)', fontsize=PLOT_FONT_SIZE)
+ax.set_ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
+plt.show()
+fig.savefig(IMG_FOLDER + "/latest_all_D-T_hexbin.png", bbox_inches='tight')
+plt.close(fig)
+
+
+plot = output_df.plot.scatter(x='N', y='A', figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
 plt.xlabel('Active Case Number (cases)', fontsize=PLOT_FONT_SIZE)
-plt.ylabel('Onset Rate (#/days)', fontsize=PLOT_FONT_SIZE)
+plt.ylabel('Onset Rate (cases/day)', fontsize=PLOT_FONT_SIZE)
 plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_all_A-N.png", bbox_inches='tight')
 plt.close(fig)
 
-plot = output_df.plot.scatter(x='N', y='D', xlim=(1,10000000),ylim=(0.0001,1),figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
+fig, ax = plt.subplots()
+plot = output_df.plot.hexbin(x='N', y='A',figsize=(15,15),fontsize=26,gridsize=20, xscale='log', yscale='log', mincnt=1, cmap='Blues', ax=ax)
+ax.set_xlabel('Active Case Number (cases)', fontsize=PLOT_FONT_SIZE)
+ax.set_ylabel('Onset Rate (cases/day)', fontsize=PLOT_FONT_SIZE)
+plt.show()
+fig.savefig(IMG_FOLDER + "/latest_all_A-N_hexbin.png", bbox_inches='tight')
+plt.close(fig)
+
+
+
+plot = output_df.plot.scatter(x='N', y='D', ylim=(0.0005,0.5), figsize=(15,15),fontsize=26,logy=True, logx=True, c='DarkBlue')
 plt.xlabel('Active Case Number (cases)', fontsize=PLOT_FONT_SIZE)
 plt.ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
 plt.show()
 fig = plot.get_figure()
 fig.savefig(IMG_FOLDER + "/latest_all_D-N.png", bbox_inches='tight')
+plt.close(fig)
+
+fig, ax = plt.subplots()
+plot = output_df.plot.hexbin(x='N', y='D', ylim=(0.0005,0.5), figsize=(15,15),fontsize=26,gridsize=20, xscale='log', yscale='log', mincnt=1, cmap='Blues', ax=ax)
+ax.set_xlabel('Active Case Number (cases)', fontsize=PLOT_FONT_SIZE)
+ax.set_ylabel('Death ratio (%)', fontsize=PLOT_FONT_SIZE)
+plt.show()
+fig.savefig(IMG_FOLDER + "/latest_all_D-N_hexbin.png", bbox_inches='tight')
 plt.close(fig)

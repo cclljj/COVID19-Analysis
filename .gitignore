@@ -1,1 +1,4 @@
 *.log
+*.ipynb
+images/*
+images_plotnine/*

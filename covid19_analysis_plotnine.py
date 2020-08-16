@@ -256,7 +256,7 @@ def draw_D( DF, X="date", Y="count", COLOR="Country/Region", Xlab='Date', Ylab="
     pic.save( filename=FILENAME, format="png", path=IMG_FOLDER, width=20, height=10, dpi=100, limitsize=False )
 
 
-def X_X(DF, X, Y, Xlab, Ylab, FILENAME, Xlim=[], Ylim=(0,2), TITLE="" ):
+def X_Y(DF, X, Y, Xlab, Ylab, FILENAME, Xlim=[], Ylim=(0,2), TITLE="" ):
     pic = (
         ggplot(DF, aes(x=X, y=Y))
         + geom_point(fill='DarkBlue', size=1)
@@ -266,6 +266,23 @@ def X_X(DF, X, Y, Xlab, Ylab, FILENAME, Xlim=[], Ylim=(0,2), TITLE="" ):
         + scale_y_log10()
         + scale_x_log10(expand=(0,0))
         + xlim(Xlim[0], Xlim[1])
+        + coord_cartesian(ylim=Ylim)
+        + ggtitle(TITLE)
+        + theme_light()
+        )
+
+    pic.save( filename=FILENAME, format="png", path=IMG_FOLDER, width=10, height=10, dpi=100, limitsize=False )
+
+def Y_Y(DF, X, Y, Xlab, Ylab, FILENAME, Xlim=(0,2), Ylim=(0,2), TITLE="" ):
+    pic = (
+        ggplot(DF, aes(x=X, y=Y))
+        + geom_point(fill='DarkBlue', size=1)
+        + geom_smooth(method='lm', fill="green")
+        + xlab(Xlab)
+        + ylab(Ylab)
+        + scale_y_log10()
+        + scale_x_log10(expand=(0,0))
+        + coord_cartesian(xlim=xlim)
         + coord_cartesian(ylim=Ylim)
         + ggtitle(TITLE)
         + theme_light()
@@ -388,10 +405,10 @@ logging.info("Finish drawing A,D plot of latest_{}".format("Deathly"))
 
 output_df = pd.DataFrame({"Country":T[T.columns[0]],"N":N[T.columns[len(T.columns)-1]],"A":A[T.columns[len(T.columns)-1]],"T":T[T.columns[len(T.columns)-1]],"D":D[T.columns[len(T.columns)-1]]})
 
-X_X( output_df, X="T", Y="A", Xlab="Average Recovery Time (days)", Ylab="Onset Rate (#/days)", FILENAME="latest_all_A-T.png", Xlim=[0.1,200], Ylim=(-2,5), TITLE="latest_all_A-T" )
-X_X( output_df, X="T", Y="D", Xlab="Average Recovery Time (days)", Ylab="Death ratio (%)", FILENAME="latest_all_D-T.png", Xlim=[0.1,200], Ylim=(-3,0), TITLE="latest_all_D-T" )
-X_X( output_df, X="N", Y="A", Xlab="Active Case Number (cases)", Ylab="Onset Rate (#/days)", FILENAME="latest_all_A-N.png", Xlim=[-10,800], Ylim=(-2,3), TITLE="latest_all_A-N" )
-X_X( output_df, X="N", Y="D", Xlab="Active Case Number (cases)", Ylab="Death ratio (%)", FILENAME="latest_all_D-N.png", Xlim=[-10,800], Ylim=(-4,1), TITLE="latest_all_D-N" )
+X_Y( output_df, X="T", Y="A", Xlab="Average Recovery Time (days)", Ylab="Onset Rate (#/days)", FILENAME="latest_all_A-T.png", Xlim=[0.1,200], Ylim=(-2,5), TITLE="latest_all_A-T" )
+X_Y( output_df, X="T", Y="D", Xlab="Average Recovery Time (days)", Ylab="Death ratio (%)", FILENAME="latest_all_D-T.png", Xlim=[0.1,200], Ylim=(-3,0), TITLE="latest_all_D-T" )
+Y_Y( output_df, X="N", Y="A", Xlab="Active Case Number (cases)", Ylab="Onset Rate (#/days)", FILENAME="latest_all_A-N.png", Xlim=(-1,6), Ylim=(-2,5), TITLE="latest_all_A-N" )
+Y_Y( output_df, X="N", Y="D", Xlab="Active Case Number (cases)", Ylab="Death ratio (%)", FILENAME="latest_all_D-N.png", Xlim=(-1,7), Ylim=(-4,1), TITLE="latest_all_D-N" )
 logging.info("Finish drawing last_all_ plot between T-A, T-D, N-A, N-D")
 
 

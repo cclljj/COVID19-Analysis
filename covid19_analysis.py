@@ -12,7 +12,7 @@ import pylab as plot
 from datetime import datetime
 version = datetime.utcnow().strftime("%Y/%m/%d")
 
-WINDOW = 1000	# sliding window size for calculating N, A, T, and D
+WINDOW = 120	# sliding window size for calculating N, A, T, and D
 PLOT_FONT_SIZE = 26
 LEGEND_FONT_SIZE = 20
 params = {'legend.fontsize': LEGEND_FONT_SIZE,
@@ -152,6 +152,7 @@ T = df1.copy()
 for i in range(2,len(T.columns)):
   for index, row in T.iterrows():
     if A.iat[index,i]==0:
+      A.iat[index,i] = 0.1
       if T.iat[index,i-1]>0:
         T.iat[index,i] = T.iat[index,i-1] + 1
       else:

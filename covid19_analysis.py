@@ -19,7 +19,7 @@ params = {'legend.fontsize': LEGEND_FONT_SIZE,
           'legend.handlelength': 2}
 plot.rcParams.update(params)
 
-IMG_FOLDER = "/opendata/data/COVID19-Analysis/images/"
+IMG_FOLDER = "/lass-data/opendata/data/COVID19-Analysis/images/"
 if not os.path.exists(IMG_FOLDER):
   os.makedirs(IMG_FOLDER)
 
